@@ -5,17 +5,13 @@ CLI tool to extract m3u8 stream URLs from webpages and play them in VLC with the
 ## Prerequisites
 
 - [VLC](https://www.videolan.org/) installed on your system
-- [uv](https://github.com/astral-sh/uv) package manager
+- [uv](https://github.com/astral-sh/uv) package manager - [Installation](https://github.com/astral-sh/uv?tab=readme-ov-file#installation)
 
 ## Installation
 
 ### macOS
 
 ```bash
-# Install uv if not present
-brew install astral-sh/uv/uv
-
-# Clone and setup
 git clone https://github.com/davidecoccia/media-stream-extractor.git
 cd media-stream-extractor
 uv sync --extra dev
@@ -25,11 +21,6 @@ playwright install chromium
 ### Linux
 
 ```bash
-# Install uv if not present
-curl -LsSf https://astral.sh/uv/install.sh | sh
-source ~/.bashrc  # or ~/.zshrc
-
-# Clone and setup
 git clone https://github.com/davidecoccia/media-stream-extractor.git
 cd media-stream-extractor
 uv sync --extra dev
@@ -39,10 +30,6 @@ playwright install chromium
 ### Windows
 
 ```powershell
-# Install uv if not present
-winget install astral-sh.uv
-
-# Clone and setup
 git clone https://github.com/davidecoccia/media-stream-extractor.git
 cd media-stream-extractor
 uv sync --extra dev
