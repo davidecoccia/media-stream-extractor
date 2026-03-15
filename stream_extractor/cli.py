@@ -9,7 +9,8 @@ def extract_stream_info(page_url: str) -> dict:
     """Extract m3u8 URL and headers from page."""
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+        context = browser.new_context(ignore_https_errors=True)
+        page = context.new_page()
 
         stream_data = {}
 
@@ -21,6 +22,7 @@ def extract_stream_info(page_url: str) -> dict:
 
         page.on("request", handle_request)
         page.goto(page_url)
+        page.wait_for_load_state("networkidle", timeout=30000)
         page.wait_for_timeout(5000)
         browser.close()
 
