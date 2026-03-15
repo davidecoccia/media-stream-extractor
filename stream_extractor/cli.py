@@ -17,8 +17,7 @@ def extract_stream_info(page_url: str) -> dict:
         def handle_request(request):
             if ".m3u8" in request.url:
                 stream_data["url"] = request.url
-                stream_data["referer"] = request.headers.get("referer", "")
-                stream_data["user_agent"] = request.headers.get("user-agent", "")
+                stream_data["headers"] = dict(request.headers)
 
         page.on("request", handle_request)
         page.goto(page_url)
@@ -61,8 +60,17 @@ def main() -> None:
         sys.exit(1)
 
     print(f"Stream URL: {stream_data['url']}")
-    print(f"Referer: {stream_data['referer']}")
-    print(f"User-Agent: {stream_data['user_agent']}")
+    headers = stream_data.get("headers", {})
+    print(f"Headers: {headers}")
+    referer = headers.get("referer", "")
+    user_agent = headers.get("user-agent", "")
+
+    if args.no_play:
+        print("\nStream info extracted (--no-play specified)")
+        return
+
+    print(f"Referer: {referer}")
+    print(f"User-Agent: {user_agent}")
 
     if args.no_play:
         print("\nStream info extracted (--no-play specified)")
@@ -71,8 +79,8 @@ def main() -> None:
     print("\nLaunching VLC...")
     launch_vlc(
         stream_data["url"],
-        stream_data["referer"],
-        stream_data["user_agent"],
+        referer,
+        user_agent,
     )
 
 
