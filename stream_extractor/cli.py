@@ -28,26 +28,35 @@ def extract_stream_info(page_url: str) -> dict:
         return stream_data
 
 
-def launch_vlc(stream_url: str, referer: str, user_agent: str) -> None:
-    """Launch VLC with stream URL and headers."""
-    cmd = [
-        "vlc",
-        stream_url,
-        "--http-referrer", referer,
-        "--http-user-agent", user_agent,
-    ]
+def launch_player(stream_url: str, headers: dict, user_agent: str) -> None:
+    """Launch mpv with stream URL and headers."""
+    # Build header fields string (comma-separated key: value pairs)
+    header_fields = []
+    if headers.get("referer"):
+        header_fields.append(f"Referer: {headers['referer']}")
+    if headers.get("origin"):
+        header_fields.append(f"Origin: {headers['origin']}")
+
+    cmd = ["mpv", stream_url]
+
+    if header_fields:
+        cmd.extend(["--http-header-fields", ", ".join(header_fields)])
+
+    if user_agent:
+        cmd.extend(["--user-agent", user_agent])
+
     subprocess.run(cmd)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Extract m3u8 streams from URLs and play in VLC"
+        description="Extract m3u8 streams from URLs and play in mpv"
     )
     parser.add_argument("url", help="The webpage URL to extract stream from")
     parser.add_argument(
         "--no-play",
         action="store_true",
-        help="Only extract and print stream info, don't launch VLC",
+        help="Only extract and print stream info, don't launch mpv",
     )
 
     args = parser.parse_args()
@@ -65,10 +74,6 @@ def main() -> None:
     referer = headers.get("referer", "")
     user_agent = headers.get("user-agent", "")
 
-    if args.no_play:
-        print("\nStream info extracted (--no-play specified)")
-        return
-
     print(f"Referer: {referer}")
     print(f"User-Agent: {user_agent}")
 
@@ -76,10 +81,10 @@ def main() -> None:
         print("\nStream info extracted (--no-play specified)")
         return
 
-    print("\nLaunching VLC...")
-    launch_vlc(
+    print("\nLaunching mpv...")
+    launch_player(
         stream_data["url"],
-        referer,
+        headers,
         user_agent,
     )
 

@@ -1,10 +1,10 @@
 # Stream Extractor
 
-CLI tool to extract m3u8 stream URLs from webpages and play them in VLC with the correct headers.
+CLI tool to extract m3u8 stream URLs from webpages and play them in mpv with the correct headers.
 
 ## Prerequisites
 
-- [VLC](https://www.videolan.org/) installed on your system
+- [mpv](https://mpv.io/) installed on your system - [Installation](https://mpv.io/installation/)
 - [uv](https://github.com/astral-sh/uv) package manager - [Installation](https://github.com/astral-sh/uv?tab=readme-ov-file#installation)
 
 ## Installation
@@ -39,10 +39,10 @@ playwright install chromium
 ## Usage
 
 ```bash
-# Extract stream and play in VLC
+# Extract stream and play in mpv
 uv run stream-extractor <url>
 
-# Extract stream info only (don't launch VLC)
+# Extract stream info only (don't launch mpv)
 uv run stream-extractor <url> --no-play
 ```
 
